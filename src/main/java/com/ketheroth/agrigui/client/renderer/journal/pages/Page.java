@@ -4,6 +4,7 @@ import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.client.IAgriGrowableGuiRenderer;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
+import com.ketheroth.agrigui.AgriGUI;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public abstract class Page {
 	protected static final int PAGE_LEFT_Y = 7;
 	protected static final int PAGE_WIDTH = 115;
 	protected static final int PAGE_HEIGHT = 145;
+	protected final ResourceLocation FONT = new ResourceLocation(AgriGUI.MODID, "unicode_font");
 
 	public abstract void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset);
 
@@ -33,9 +36,9 @@ public abstract class Page {
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		matrixStack.scale(scale, scale, scale);
 		final int[] dy = {y};
-		fontRenderer.trimStringToWidth(text, (int) (this.PAGE_WIDTH / scale)).forEach(line -> {
+		fontRenderer.trimStringToWidth(text.deepCopy().mergeStyle(Style.EMPTY.setFontId(FONT)), (int) (PAGE_WIDTH / scale)).forEach(line -> {
 			fontRenderer.func_238422_b_(matrixStack, line, x / scale, dy[0] / scale, 0);
-			dy[0] += (Math.ceil(fontRenderer.FONT_HEIGHT * scale));
+			dy[0] += (Math.ceil(7 * scale));
 		});
 		matrixStack.pop();
 		return dy[0];

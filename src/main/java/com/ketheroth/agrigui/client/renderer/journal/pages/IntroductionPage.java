@@ -27,16 +27,16 @@ public class IntroductionPage extends Page {
 		int dx = renderX + PAGE_RIGHT_X;
 		float spacing = 6;
 		// Title
-		dy = this.drawText(matrixStack, INTRODUCTION, dx, dy, 1.0F);
-		dy += spacing;
+		dy = this.drawText(matrixStack, INTRODUCTION, dx, dy, 1.3F);
+		dy += spacing - 1;
 		// First paragraph
-		dy = this.drawText(matrixStack, PARAGRAPH_1, dx, dy, 0.70F);
+		dy = this.drawText(matrixStack, PARAGRAPH_1, dx, dy, 1.0F);
 		dy += spacing;
 		// Second paragraph
-		dy = this.drawText(matrixStack, PARAGRAPH_2, dx, dy, 0.70F);
+		dy = this.drawText(matrixStack, PARAGRAPH_2, dx, dy, 1.0F);
 		dy += spacing;
 		// Third paragraph
-		this.drawText(matrixStack, PARAGRAPH_3, dx, dy, 0.70F);
+		this.drawText(matrixStack, PARAGRAPH_3, dx, dy, 1.0F);
 	}
 
 }

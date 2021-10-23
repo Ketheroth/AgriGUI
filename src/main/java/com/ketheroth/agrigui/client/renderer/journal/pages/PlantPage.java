@@ -116,9 +116,9 @@ public class PlantPage extends Page {
 	public void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset) {
 		// Title
 		this.drawTexture(Textures.TITLE, textureManager, matrixStack, blitOffset, renderX + PAGE_LEFT_X, renderY + 2 + PAGE_LEFT_Y, 128, 20);
-		this.drawText(matrixStack, this.plant.getSeedName(), renderX + PAGE_LEFT_X + 30, renderY + PAGE_LEFT_Y + 10, 1.0F);
+		this.drawText(matrixStack, this.plant.getSeedName(), renderX + PAGE_LEFT_X + 30, renderY + PAGE_LEFT_Y + 6, 1.3F);
 		// Description
-		int topY = this.drawText(matrixStack, this.plant.getInformation(), renderX + PAGE_LEFT_X + 10, renderY + PAGE_LEFT_Y + 30, 0.70F);
+		int topY = this.drawText(matrixStack, this.plant.getInformation(), renderX + PAGE_LEFT_X + 10, renderY + PAGE_LEFT_Y + 30, 1.0F);
 		// Growth requirements
 		topY = Math.max(topY, renderY + PAGE_LEFT_Y + 70);
 		topY = this.drawGrowthRequirements(textureManager, matrixStack, blitOffset, renderX + PAGE_LEFT_X, topY);
@@ -137,7 +137,7 @@ public class PlantPage extends Page {
 	}
 
 	protected int drawGrowthRequirements(TextureManager textureManager, MatrixStack matrixStack, int blitOffset, int renderX, int renderY) {
-		int dy = this.drawText(matrixStack, GROWTH_REQUIREMENTS, renderX + 10, renderY, 0.80F) + 1;
+		int dy = this.drawText(matrixStack, GROWTH_REQUIREMENTS, renderX + 10, renderY, 1.2F) + 1;
 		dy = (int) Math.ceil(dy);
 		// Light level
 		this.drawTexture(Textures.BRIGHTNESS_BAR, textureManager, matrixStack, blitOffset, renderX + 10, dy, 66, 8);
@@ -210,7 +210,7 @@ public class PlantPage extends Page {
 	protected int drawGrowthStages(TextureManager textureManager, MatrixStack matrixStack, int blitOffset, int renderX, int renderY) {
 		int delta = 20;
 		// draw text
-		int topY = this.drawText(matrixStack, GROWTH_STAGES, renderX, renderY, 0.90F) + 2;
+		int topY = this.drawText(matrixStack, GROWTH_STAGES, renderX, renderY, 1.2F) + 2;
 		// draw stages
 		for (int i = 0; i < this.stages.size(); i++) {
 			int dx = delta * (i % 4);
@@ -223,7 +223,7 @@ public class PlantPage extends Page {
 	}
 
 	protected void drawProducts(TextureManager textureManager, MatrixStack matrixStack, int blitOffset, int renderX, int renderY) {
-		this.drawText(matrixStack, PRODUCTS, renderX + 10, renderY + 15, 0.80F);
+		this.drawText(matrixStack, PRODUCTS, renderX + 10, renderY + 15, 1.2F);
 		for (int i = 0; i < this.drops.size(); i++) {
 			this.drawTexture(Textures.MUTATION, textureManager, matrixStack, blitOffset, renderX + 12 + i * 20 + PAGE_WIDTH / 2, renderY + 9, 83, 18, 0, 0, 18, 18);
 			Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(this.drops.get(i), renderX + 13 + i * 20 + PAGE_WIDTH / 2, renderY + 10);
@@ -231,7 +231,7 @@ public class PlantPage extends Page {
 	}
 
 	protected void drawMutations(TextureManager textureManager, MatrixStack matrixStack, int blitOffset, int renderX, int renderY) {
-		this.drawText(matrixStack, MUTATIONS, renderX, renderY + 2, 0.90F);
+		this.drawText(matrixStack, MUTATIONS, renderX, renderY + 2, 1.2F);
 		int posY = renderY + 12;
 		int dy = 20;
 		for (List<IAgriPlant> plants : this.mutationsOnPage) {

@@ -90,19 +90,19 @@ dependencies {
 
 	// Agricraft 3.0.5
 	compileOnly fg.deobf("curse.maven:agricraft-225635:3441653")
-//	runtimeOnly fg.deobf("curse.maven:agricraft-225635:3441653")
+	runtimeOnly fg.deobf("curse.maven:agricraft-225635:3441653")
 	// InfinityLib 2.0.6
 	compileOnly fg.deobf("curse.maven:infinitylib-251396:3441572")
-//	runtimeOnly fg.deobf("curse.maven:infinitylib-251396:3441572")
+	runtimeOnly fg.deobf("curse.maven:infinitylib-251396:3441572")
 
 	//Serene Seasons
 //	compileOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
-//	runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
+	runtimeOnly fg.deobf("curse.maven:serene_seasons-291874:3202233")
 
 	//Mystical Agriculture
 //	compileOnly fg.deobf("curse.maven:mystical_agriculture_api-246640:3359340")
-//	runtimeOnly fg.deobf("curse.maven:mystical_agriculture-246640:3398788")
-//	runtimeOnly fg.deobf("curse.maven:cucumber-272335:3349690")   //Mystical Agriculture runtime dependency
+	runtimeOnly fg.deobf("curse.maven:mystical_agriculture-246640:3398788")
+	runtimeOnly fg.deobf("curse.maven:cucumber-272335:3349690")   //Mystical Agriculture runtime dependency
 	// Real examples
 	// compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
 	// compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
