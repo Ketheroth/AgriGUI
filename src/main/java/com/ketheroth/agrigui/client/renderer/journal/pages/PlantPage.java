@@ -14,12 +14,13 @@ import com.infinityraider.agricraft.impl.v1.plant.NoPlant;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -112,6 +113,7 @@ public class PlantPage extends Page {
 		return this.mutationsOffPage;
 	}
 
+	int cacheTopY = -1;
 	@Override
 	public void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset) {
 		// Title
@@ -122,6 +124,7 @@ public class PlantPage extends Page {
 		// Growth requirements
 		topY = Math.max(topY, renderY + PAGE_LEFT_Y + 70);
 		topY = this.drawGrowthRequirements(textureManager, matrixStack, blitOffset, renderX + PAGE_LEFT_X, topY);
+		this.cacheTopY = topY;
 		// Seed
 		this.plant.getGuiRenderer().drawSeed(this.plant, new Renderer(blitOffset), matrixStack, renderX + PAGE_LEFT_X + 4, renderY + PAGE_LEFT_Y + 4, 16, 16);
 		// Products
@@ -149,10 +152,10 @@ public class PlantPage extends Page {
 				this.drawTexture(Textures.BRIGHTNESS_HIGHLIGHT, textureManager, matrixStack, blitOffset, renderX + 10 + 4 * i + 1, dy, 4, 8, 1, 0, 2, 8);
 				this.drawTexture(Textures.BRIGHTNESS_HIGHLIGHT, textureManager, matrixStack, blitOffset, renderX + 10 + 4 * i + 3, dy, 4, 8, 1, 0, 2, 8);
 				if (!prev) {
-					this.drawTexture(Textures.BRIGHTNESS_HIGHLIGHT, textureManager, matrixStack, blitOffset, renderX + 10 + 4 * i, dy, 2, 8, 0, 0, 1, 8);
+					this.drawTexture(Textures.BRIGHTNESS_HIGHLIGHT, textureManager, matrixStack, blitOffset, renderX + 10 + 4 * i, dy, 4, 8, 0, 0, 1, 8);
 				}
 				if (!next) {
-					this.drawTexture(Textures.BRIGHTNESS_HIGHLIGHT, textureManager, matrixStack, blitOffset, renderX + 10 + 4 * i + 5, dy, 2, 8, 2, 0, 1, 8);
+					this.drawTexture(Textures.BRIGHTNESS_HIGHLIGHT, textureManager, matrixStack, blitOffset, renderX + 10 + 4 * i + 5, dy, 4, 8, 3, 0, 1, 8);
 				}
 			}
 		}
@@ -238,6 +241,110 @@ public class PlantPage extends Page {
 			this.drawMutation(textureManager, matrixStack, blitOffset, renderX, posY, plants);
 			posY += dy;
 		}
+	}
+
+	@Override
+	public List<ITextComponent> getTooltipList(int mouseX, int mouseY, int renderX, int renderY) {
+		// seed item
+		if (isInSquare(mouseX, mouseY, renderX + PAGE_LEFT_X + 4, renderX + PAGE_LEFT_X + 4 + 16, renderY + 4 + PAGE_LEFT_Y, renderY + 4 + PAGE_LEFT_Y + 16)) {
+			return Collections.singletonList(this.plant.getTooltip());
+		}
+		int startReqX = renderX + PAGE_LEFT_X;
+		int startReqY = Math.max(fakeDrawText(this.plant.getInformation(), renderY + PAGE_LEFT_Y + 30, 1.0F), renderY + PAGE_LEFT_Y + 70);
+		startReqY = fakeDrawText(GROWTH_REQUIREMENTS, startReqY, 1.2F);
+		// brightness requirement
+		for (int i = 0; i < this.brightnessMask.length; i++) {
+			if (isInSquare(mouseX, mouseY, startReqX + 10 + 4*i, startReqX + 10 + 4 + 4*i, startReqY, startReqY + 8)) {
+				return Collections.singletonList(new TranslationTextComponent("agricraft.tooltip.light").appendString(" " + i));
+			}
+		}
+		startReqY+=9;
+		// seasons requirement
+		if (AgriApi.getSeasonLogic().isActive()) {
+			int dx = 70;
+			int w = 10;
+			int h = 12;
+			for (int i = 0; i < this.seasonMask.length; i++) {
+				int x = (i % 2) * (w + 2) + 5;
+				int y = (i / 2) * (h + 2) + 6;
+				int beginX = startReqX + x + dx;
+				int beginY = startReqY + y;
+				if (isInSquare(mouseX, mouseY, beginX, beginX + 10, beginY, beginY + 12)) {
+					if (this.seasonMask[i]) {
+						return Collections.singletonList(AgriSeason.values()[i].getDisplayName());
+					}
+				}
+			}
+		}
+		// humidity requirement
+		for (int i = 0; i < this.humidityMask.length; i++) {
+			int dx = Textures.HUMIDITY_OFFSETS[i];
+			int w = Textures.HUMIDITY_OFFSETS[i + 1] - Textures.HUMIDITY_OFFSETS[i];
+			if (isInSquare(mouseX, mouseY, startReqX + 10 + dx, startReqX + 10 + dx + w, startReqY, startReqY + 12)) {
+				if (this.humidityMask[i]) {
+					return Collections.singletonList(IAgriSoil.Humidity.values()[i].getDescription());
+				} else {
+					return Collections.emptyList();
+				}
+			}
+		}
+		startReqY+=13;
+		// acidity requirement
+		for (int i = 0; i < this.acidityMask.length; i++) {
+			int dx = Textures.ACIDITY_OFFSETS[i];
+			int w = Textures.ACIDITY_OFFSETS[i + 1] - Textures.ACIDITY_OFFSETS[i];
+			if (isInSquare(mouseX, mouseY, startReqX + 10 + dx, startReqX + 10 + dx + w, startReqY, startReqY + 12)) {
+				if (this.acidityMask[i]) {
+					return Collections.singletonList(IAgriSoil.Acidity.values()[i].getDescription());
+				} else {
+					return Collections.emptyList();
+				}
+			}
+		}
+		startReqY+=13;
+		// nutrients requirement
+		for (int i = 0; i < this.nutrientsMask.length; i++) {
+			int dx = Textures.NUTRIENTS_OFFSETS[i];
+			int w = Textures.NUTRIENTS_OFFSETS[i + 1] - Textures.NUTRIENTS_OFFSETS[i];
+			if (isInSquare(mouseX, mouseY, startReqX + 10 + dx, startReqX + 10 + dx + w, startReqY, startReqY + 12)) {
+				if (this.nutrientsMask[i]) {
+					return Collections.singletonList(IAgriSoil.Nutrients.values()[i].getDescription());
+				} else {
+					return Collections.emptyList();
+				}
+			}
+		}
+		//products items
+		for (int i = 0; i < this.drops.size(); i++) {
+			int startX = renderX + 13 + i * 20 + PAGE_WIDTH / 2 + PAGE_LEFT_X;
+			int startY = cacheTopY;
+			if (isInSquare(mouseX, mouseY, startX, startX + 16, startY + 10, startY + 10 + 16)) {
+				return getTooltipFromItem(this.drops.get(i));
+			}
+		}
+		// mutations plants
+		int startMutX = renderX + PAGE_RIGHT_X;
+		int startMutY = fakeDrawText(GROWTH_STAGES, renderY + PAGE_RIGHT_Y, 1.2F) + 2 + 20 * this.stages.size() / 4 + 12;
+		for (int y = 0; y < this.mutationsOnPage.size(); y++) {
+			if (isInSquare(mouseX, mouseY, startMutX + 1, startMutX + 1 + 16, startMutY + 1 + y*20, startMutY + 1 + 16 + y*20)) {
+				return Collections.singletonList(this.mutationsOnPage.get(y).get(0).getTooltip());
+			} else if (isInSquare(mouseX, mouseY, startMutX + 35, startMutX + 35 + 16, startMutY + 1 + y*20, startMutY + 1 + 16 + y*20)) {
+				return Collections.singletonList(this.mutationsOnPage.get(y).get(1).getTooltip());
+			} else if (isInSquare(mouseX, mouseY, startMutX + 69, startMutX + 69 + 16, startMutY + 1 + y*20, startMutY + 1 + 16 + y*20)) {
+				return Collections.singletonList(this.mutationsOnPage.get(y).get(2).getTooltip());
+			}
+		}
+		return Collections.emptyList();
+	}
+
+	private List<ITextComponent> getTooltipFromItem(ItemStack itemStack) {
+		return itemStack.getTooltip(Minecraft.getInstance().player, Minecraft.getInstance().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
+	}
+
+	private int fakeDrawText(ITextComponent text, int y, float scale) {
+		final int[] dy = {y};
+		Minecraft.getInstance().fontRenderer.trimStringToWidth(text.deepCopy().mergeStyle(Style.EMPTY.setFontId(FONT)), (int) (PAGE_WIDTH / scale)).forEach(line -> dy[0] += (Math.ceil(7 * scale)));
+		return dy[0];
 	}
 
 }

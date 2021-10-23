@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Page {
@@ -59,6 +60,14 @@ public abstract class Page {
 		plants.get(0).getGuiRenderer().drawGrowthStage(plants.get(0), plants.get(0).getFinalStage(), renderer, matrixStack, renderX + 1, renderY + 1, 16, 16);
 		plants.get(1).getGuiRenderer().drawGrowthStage(plants.get(1), plants.get(1).getFinalStage(), renderer, matrixStack, renderX + 35, renderY + 1, 16, 16);
 		plants.get(2).getGuiRenderer().drawGrowthStage(plants.get(2), plants.get(2).getFinalStage(), renderer, matrixStack, renderX + 69, renderY + 1, 16, 16);
+	}
+
+	public List<ITextComponent> getTooltipList(int mouseX, int mouseY, int renderX, int renderY) {
+		return Collections.emptyList();
+	}
+
+	protected boolean isInSquare(int x, int y, int startX, int endX, int startY, int endY) {
+		return x >= startX && x <= endX && y >= startY && y <= endY;
 	}
 
 	public static final class Textures {
