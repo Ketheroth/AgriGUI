@@ -10,4 +10,5 @@ public class ClientProxy {
 	public static void openScreen(ItemStack journal) {
 		Minecraft.getInstance().displayGuiScreen(new JournalScreen(new TranslationTextComponent("journalgui"), journal));
 	}
+
 }

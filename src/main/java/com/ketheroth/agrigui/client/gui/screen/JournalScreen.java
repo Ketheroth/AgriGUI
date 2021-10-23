@@ -14,8 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -62,7 +60,6 @@ public class JournalScreen extends Screen {
 		journalData.getCurrentPage().drawLeftSheet(this.minecraft.getTextureManager(), matrixStack, renderX, renderY, this.getBlitOffset());
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		this.func_243308_b(matrixStack, journalData.getCurrentPage().getTooltipList(mouseX, mouseY, renderX, renderY), mouseX, mouseY);
-//		this.renderTooltips(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
@@ -73,11 +70,6 @@ public class JournalScreen extends Screen {
 			this.nextPage();
 		}
 		return true;
-	}
-
-	private void renderTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
-		this.renderTooltip(matrixStack, new TranslationTextComponent("agricraft.journal.introduction"), mouseX, mouseY);
-//		this.func_243308_b();
 	}
 
 	private void previousPage() {
