@@ -9,6 +9,4 @@ Minecraft version : 1.16.5
 
 Current GUI added :
 - agricultural journal
-
-GUI to be added : 
 - seed analyzer
