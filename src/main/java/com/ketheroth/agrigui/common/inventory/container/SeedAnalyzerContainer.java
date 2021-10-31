@@ -2,6 +2,9 @@ package com.ketheroth.agrigui.common.inventory.container;
 
 import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.content.items.IAgriSeedItem;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGeneCarrierItem;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenePair;
+import com.infinityraider.agricraft.api.v1.genetics.IAgriGenome;
 import com.infinityraider.agricraft.content.core.TileEntitySeedAnalyzer;
 import com.ketheroth.agrigui.core.registry.AgriGuiContainerTypes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,6 +21,8 @@ import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class SeedAnalyzerContainer extends Container {
@@ -40,19 +45,18 @@ public class SeedAnalyzerContainer extends Container {
 				return stack.getItem() instanceof IAgriSeedItem;
 			}
 
-			@Nonnull
 			@Override
-			public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+			protected void onContentsChanged(int slot) {
 				if (!SeedAnalyzerContainer.this.journalHandler.getStackInSlot(0).isEmpty()) {
 					ItemStack journalStack = SeedAnalyzerContainer.this.journalHandler.extractItem(0, 64, false);
-					Optional<ItemStack> newJournal = TileEntitySeedAnalyzer.addSeedToJournal(stack, journalStack);
+					Optional<ItemStack> newJournal = TileEntitySeedAnalyzer.addSeedToJournal(this.getStackInSlot(slot).copy(), journalStack);
 					if (newJournal.isPresent()) {
 						SeedAnalyzerContainer.this.journalHandler.insertItem(0, newJournal.get(), false);
 					} else {
 						SeedAnalyzerContainer.this.journalHandler.insertItem(0, journalStack, false);
 					}
 				}
-				return super.insertItem(slot, stack, simulate);
+				super.onContentsChanged(slot);
 			}
 		};
 		this.journalHandler = new ItemStackHandler(1) {
@@ -69,19 +73,27 @@ public class SeedAnalyzerContainer extends Container {
 		}
 
 		//layout seed inventory
-		this.addSlot(new SlotItemHandler(this.seedHandler, 0, 80, 40));
+		this.addSlot(new SlotItemHandler(this.seedHandler, 0, 21, 38));
 		//layout journal inventory
-		this.addSlot(new SlotItemHandler(this.journalHandler, 0, 152 , 68));
+		this.addSlot(new SlotItemHandler(this.journalHandler, 0, 21 , 71));
 		//layout player inventory
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 9; x++) {
-				this.addSlot(new SlotItemHandler(this.playerInventory, 9 + 9 * y + x, 8 + 18 * x, 94 + 18 * y));
+				this.addSlot(new SlotItemHandler(this.playerInventory, 9 + 9 * y + x, 8 + 18 * x, 104 + 18 * y));
 			}
 		}
 		for (int i = 0; i < 9; i++) {
-			this.addSlot(new SlotItemHandler(this.playerInventory, i, 8 + 18 * i, 152));
+			this.addSlot(new SlotItemHandler(this.playerInventory, i, 8 + 18 * i, 162));
 		}
 
+	}
+
+	public List<IAgriGenePair<?>> getGeneToRender() {
+		ItemStack seed = seedHandler.getStackInSlot(0).copy();
+		if (seed.isEmpty()) {
+			return Collections.emptyList();
+		}
+		return ((IAgriGeneCarrierItem)seed.getItem()).getGenome(seed).map(IAgriGenome::getGeneList).orElse(Collections.emptyList());
 	}
 
 	@Override
