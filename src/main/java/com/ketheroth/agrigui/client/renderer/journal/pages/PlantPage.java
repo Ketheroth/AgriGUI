@@ -20,7 +20,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -134,9 +136,9 @@ public class PlantPage extends Page {
 	@Override
 	public void drawRightSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset) {
 		// Growth stages
-		int topY = this.drawGrowthStages(textureManager, matrixStack, blitOffset, renderX + PAGE_RIGHT_X, renderY + PAGE_RIGHT_Y);
+		int topY = this.drawGrowthStages(textureManager, matrixStack, blitOffset, renderX + PAGE_RIGHT_X + 5, renderY + PAGE_RIGHT_Y);
 		// Mutations
-		this.drawMutations(textureManager, matrixStack, blitOffset, renderX + PAGE_RIGHT_X, topY);
+		this.drawMutations(textureManager, matrixStack, blitOffset, renderX + PAGE_RIGHT_X + 5, topY);
 	}
 
 	protected int drawGrowthRequirements(TextureManager textureManager, MatrixStack matrixStack, int blitOffset, int renderX, int renderY) {
@@ -323,7 +325,7 @@ public class PlantPage extends Page {
 			}
 		}
 		// mutations plants
-		int startMutX = renderX + PAGE_RIGHT_X;
+		int startMutX = renderX + PAGE_RIGHT_X + 5;
 		int startMutY = fakeDrawText(GROWTH_STAGES, renderY + PAGE_RIGHT_Y, 1.2F) + 2 + 20 * this.stages.size() / 4 + 12;
 		for (int y = 0; y < this.mutationsOnPage.size(); y++) {
 			if (isInSquare(mouseX, mouseY, startMutX + 1, startMutX + 1 + 16, startMutY + 1 + y*20, startMutY + 1 + 16 + y*20)) {

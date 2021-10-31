@@ -6,12 +6,18 @@ import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.ketheroth.agrigui.AgriGUI;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 
@@ -21,7 +27,7 @@ import java.util.List;
 public abstract class Page {
 
 	protected static final int PAGE_RIGHT_X = 142;
-	protected static final int PAGE_RIGHT_Y = 16;
+	protected static final int PAGE_RIGHT_Y = 12;
 	protected static final int PAGE_LEFT_X = 8;
 	protected static final int PAGE_LEFT_Y = 7;
 	protected static final int PAGE_WIDTH = 115;
@@ -103,10 +109,23 @@ public abstract class Page {
 			this.blitOffset = blitOffset;
 		}
 
+		public void drawColoredTexture(MatrixStack matrixStack, float x1, float x2, float y1, float y2, int blitOffset, float minU, float maxU, float minV, float maxV, float r, float g, float b, float a) {
+			BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
+			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+			Matrix4f matrix4f = matrixStack.getLast().getMatrix();
+			bufferbuilder.pos(matrix4f, x1, y2, blitOffset).tex(minU, maxV).color(r, g, b, a).endVertex();
+			bufferbuilder.pos(matrix4f, x2, y2, blitOffset).tex(maxU, maxV).color(r, g, b, a).endVertex();
+			bufferbuilder.pos(matrix4f, x2, y1, blitOffset).tex(maxU, minV).color(r, g, b, a).endVertex();
+			bufferbuilder.pos(matrix4f, x1, y1, blitOffset).tex(minU, minV).color(r, g, b, a).endVertex();
+			bufferbuilder.finishDrawing();
+			RenderSystem.enableAlphaTest();
+			WorldVertexBufferUploader.draw(bufferbuilder);
+		}
+
 		@Override
 		public void draw(MatrixStack transforms, TextureAtlasSprite texture, float x, float y, float w, float h, float r, float g, float b, float a) {
 			this.bindTextureAtlas();
-			AbstractGui.blit(transforms, (int) x, (int) y, blitOffset, (int) w, (int) h, texture);
+			this.drawColoredTexture(transforms, x, x + w, y, y + h, blitOffset, texture.getMinU(), texture.getMaxU(), texture.getMinV(), texture.getMaxV(), r, g, b, a);
 		}
 
 		@Override

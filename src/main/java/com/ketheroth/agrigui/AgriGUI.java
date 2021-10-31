@@ -69,21 +69,17 @@ public class AgriGUI {
 		BlockPos pos =event.getPos();
 		BlockState state = event.getWorld().getBlockState(pos);
 
-		if (event.getPlayer().isSneaking() || event.getPlayer().isInLava()) {
+		if (event.getPlayer().isSneaking()) {
 			return;
 		}
 		if (state.getBlock() != AgriCraft.instance.getModBlockRegistry().seed_analyzer.getBlock()) {
 			return;
 		}
-		if (event.getPlayer().world.isRemote) {
-			if (state.getBlock() == AgriCraft.instance.getModBlockRegistry().seed_analyzer.getBlock()) {
-				event.setCancellationResult(ActionResultType.SUCCESS);
-				event.setCanceled(true);
-			}
-			return;
-		}
 		event.setCancellationResult(ActionResultType.SUCCESS);
 		event.setCanceled(true);
+		if (event.getPlayer().world.isRemote) {
+			return;
+		}
 		INamedContainerProvider containerProvider = new INamedContainerProvider() {
 			@Nonnull
 			@Override
@@ -97,7 +93,6 @@ public class AgriGUI {
 			}
 		};
 		NetworkHooks.openGui((ServerPlayerEntity) event.getPlayer(), containerProvider, pos);
-		System.out.println("hello");
 	}
 
 }
