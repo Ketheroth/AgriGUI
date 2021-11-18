@@ -9,6 +9,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -64,14 +65,6 @@ public class SeedAnalyzerScreen extends ContainerScreen<SeedAnalyzerContainer> {
 
 		if (!genes.isEmpty()) {
 			int DNA_X = relX + 90;
-			int v = (geneIndex * (this.font.FONT_HEIGHT + 4)) % 73;
-			// color of the dna
-			this.blit(matrixStack, DNA_X + 1, relY + 26, 205, v, 19, 73 - v);
-			this.blit(matrixStack, DNA_X + 1, relY + 26 + 73 - v, 205, 0, 19, v);
-			// hide color out of the shape
-			this.blit(matrixStack, DNA_X, relY + 26, 222, 0, 19, 73);
-			// shape of the dna
-			this.blit(matrixStack, DNA_X, relY + 26, 186, 0, 19, 73);
 			int yy = relY + 26;
 			// species gene
 			for (int i = 0; i < geneSize; i++) {
@@ -89,8 +82,22 @@ public class SeedAnalyzerScreen extends ContainerScreen<SeedAnalyzerContainer> {
 				}
 			}
 			// stats genes
-			for (int i = geneIndex; i < geneIndex + 6; i++) {
+			int[] lineAmount = {3, 2, 2, 3, 2, 3};
+			int[] lineStart = {0, 15, 25, 35, 50, 60};
+			for (int i = geneIndex, lineIndex = 0; i < geneIndex + 6; i++, lineIndex++) {
 				IAgriGenePair<?> pair = genes.get(i);
+				// color of the gene
+				Vector3f[] colors = {pair.getGene().getDominantColor(), pair.getGene().getRecessiveColor()};
+				for (int j = 0; j < 2; j++) {
+					int argb = ((0xFF) << 24) |
+							((((int) (colors[j].getX() * 255)) & 0xFF) << 16) |
+							((((int) (colors[j].getY() * 255)) & 0xFF) << 8) |
+							((((int) (colors[j].getZ() * 255)) & 0xFF));
+					for (int k = 0; k < lineAmount[lineIndex]; k++) {
+						hLine(matrixStack, DNA_X + 9 * j, DNA_X + 9 + 8 * j, relY + 26 + lineStart[lineIndex] + k * 5, argb);
+					}
+				}
+				// text of the gene
 				ITextComponent geneText = pair.getGene().getGeneDescription();
 				ITextComponent domText = pair.getDominant().getTooltip();
 				ITextComponent recText = pair.getRecessive().getTooltip();
@@ -100,6 +107,9 @@ public class SeedAnalyzerScreen extends ContainerScreen<SeedAnalyzerContainer> {
 				this.font.drawText(matrixStack, recText, DNA_X + 21, yy, 0);
 				yy += this.font.FONT_HEIGHT + 4;
 			}
+			// shape of the dna
+			this.minecraft.getTextureManager().bindTexture(GUI);
+			this.blit(matrixStack, DNA_X, relY + 26, 186, 0, 19, 73);
 		}
 	}
 
@@ -139,8 +149,7 @@ public class SeedAnalyzerScreen extends ContainerScreen<SeedAnalyzerContainer> {
 				if (maxIndex - geneIndex > 6) {
 					geneIndex++;
 				}
-			}
-			else if (delta > 0) {
+			} else if (delta > 0) {
 				if (geneIndex > 0) {
 					geneIndex--;
 				}
