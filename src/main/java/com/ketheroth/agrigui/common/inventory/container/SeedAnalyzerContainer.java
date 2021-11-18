@@ -73,17 +73,17 @@ public class SeedAnalyzerContainer extends Container {
 		}
 
 		//layout seed inventory
-		this.addSlot(new SlotItemHandler(this.seedHandler, 0, 21, 38));
+		this.addSlot(new SlotItemHandler(this.seedHandler, 0, 26, 38));
 		//layout journal inventory
-		this.addSlot(new SlotItemHandler(this.journalHandler, 0, 21 , 71));
+		this.addSlot(new SlotItemHandler(this.journalHandler, 0, 26 , 71));
 		//layout player inventory
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 9; x++) {
-				this.addSlot(new SlotItemHandler(this.playerInventory, 9 + 9 * y + x, 8 + 18 * x, 104 + 18 * y));
+				this.addSlot(new SlotItemHandler(this.playerInventory, 9 + 9 * y + x, 13 + 18 * x, 104 + 18 * y));
 			}
 		}
 		for (int i = 0; i < 9; i++) {
-			this.addSlot(new SlotItemHandler(this.playerInventory, i, 8 + 18 * i, 162));
+			this.addSlot(new SlotItemHandler(this.playerInventory, i, 13 + 18 * i, 162));
 		}
 
 	}
