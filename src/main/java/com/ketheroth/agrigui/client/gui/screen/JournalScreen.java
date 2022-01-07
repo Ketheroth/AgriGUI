@@ -1,5 +1,6 @@
 package com.ketheroth.agrigui.client.gui.screen;
 
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.ketheroth.agrigui.AgriGUI;
 import com.ketheroth.agrigui.client.renderer.journal.JournalData;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -32,9 +33,11 @@ public class JournalScreen extends Screen {
 	private PageButton buttonPreviousPage;
 
 	private final JournalData journalData;
+	private final ItemStack journal;
 
 	public JournalScreen(ITextComponent name, ItemStack journal) {
 		super(name);
+		this.journal = journal;
 		this.journalData = new JournalData(journal);
 	}
 
@@ -56,8 +59,8 @@ public class JournalScreen extends Screen {
 		int renderX = (this.width - PAGE_WIDTH) / 2;
 		int renderY = (this.height - PAGE_HEIGHT) / 2;
 		blit(matrixStack, renderX, renderY, this.getBlitOffset(), 0, 0, PAGE_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, PAGE_WIDTH);
-		journalData.getCurrentPage().drawRightSheet(this.minecraft.getTextureManager(), matrixStack, renderX, renderY, this.getBlitOffset());
-		journalData.getCurrentPage().drawLeftSheet(this.minecraft.getTextureManager(), matrixStack, renderX, renderY, this.getBlitOffset());
+		journalData.getCurrentPage().drawRightSheet(this.minecraft.getTextureManager(), matrixStack, renderX, renderY, this.getBlitOffset(), journal, (IAgriJournalItem) journal.getItem());
+		journalData.getCurrentPage().drawLeftSheet(this.minecraft.getTextureManager(), matrixStack, renderX, renderY, this.getBlitOffset(), journal, (IAgriJournalItem) journal.getItem());
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		this.func_243308_b(matrixStack, journalData.getCurrentPage().getTooltipList(mouseX, mouseY, renderX, renderY), mouseX, mouseY);
 	}

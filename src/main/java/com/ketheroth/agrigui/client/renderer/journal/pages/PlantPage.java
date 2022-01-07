@@ -3,6 +3,7 @@ package com.ketheroth.agrigui.client.renderer.journal.pages;
 import com.google.common.collect.ImmutableList;
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.AgriApi;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.crop.IAgriGrowthStage;
 import com.infinityraider.agricraft.api.v1.genetics.IAgriMutation;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
@@ -117,7 +118,7 @@ public class PlantPage extends Page {
 
 	int cacheTopY = -1;
 	@Override
-	public void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset) {
+	public void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset, ItemStack stack, IAgriJournalItem journal) {
 		// Title
 		this.drawTexture(Textures.TITLE, textureManager, matrixStack, blitOffset, renderX + PAGE_LEFT_X, renderY + 2 + PAGE_LEFT_Y, 128, 20);
 		this.drawText(matrixStack, this.plant.getSeedName(), renderX + PAGE_LEFT_X + 30, renderY + PAGE_LEFT_Y + 6, 1.3F);
@@ -134,7 +135,7 @@ public class PlantPage extends Page {
 	}
 
 	@Override
-	public void drawRightSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset) {
+	public void drawRightSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset, ItemStack stack, IAgriJournalItem journal) {
 		// Growth stages
 		int topY = this.drawGrowthStages(textureManager, matrixStack, blitOffset, renderX + PAGE_RIGHT_X + 5, renderY + PAGE_RIGHT_Y);
 		// Mutations

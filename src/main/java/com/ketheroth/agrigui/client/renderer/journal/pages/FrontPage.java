@@ -1,8 +1,10 @@
 package com.ketheroth.agrigui.client.renderer.journal.pages;
 
 import com.infinityraider.agricraft.AgriCraft;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class FrontPage extends Page {
@@ -17,11 +19,11 @@ public class FrontPage extends Page {
 	}
 
 	@Override
-	public void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset) {
+	public void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset, ItemStack stack, IAgriJournalItem journal) {
 	}
 
 	@Override
-	public void drawRightSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset) {
+	public void drawRightSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset, ItemStack stack, IAgriJournalItem journal) {
 		this.drawTexture(BACKGROUND_FRONT_RIGHT, textureManager, matrixStack, blitOffset, renderX + PAGE_RIGHT_X - 5, renderY + PAGE_RIGHT_Y, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 	}
 

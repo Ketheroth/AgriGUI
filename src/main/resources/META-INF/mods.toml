@@ -4,7 +4,7 @@ license="MIT"
 issueTrackerURL="https://github.com/Ketheroth/AgriGUI/issues"
 [[mods]]
 modId="agrigui"
-version="1.16.5-0.1.0"
+version="1.16.5-0.2.0"
 displayName="AgriGUI"
 updateJSONURL="https://ketheroth.com/mods/agrigui.json"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/agrigui"
@@ -30,6 +30,6 @@ itemIcon="agricraft:agri_journal"
 [[dependencies.agrigui]]
     modId="agricraft"
     mandatory=true
-    versionRange="[1.16.5-3.0.5,)"
+    versionRange="[1.16.5-3.0.6,)"
     ordering="AFTER"
     side="BOTH"

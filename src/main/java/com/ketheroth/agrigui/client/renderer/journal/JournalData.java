@@ -23,7 +23,7 @@ public class JournalData {
 	private static List<Page> initializePages(ItemStack journal) {
 		ImmutableList.Builder<Page> builder = new ImmutableList.Builder<>();
 		builder.add(FrontPage.INSTANCE);
-		builder.add(IntroductionPage.INSTANCE);
+		builder.add(IntroductionPages.PAGES);
 		if (journal.getItem() instanceof IAgriJournalItem) {
 			IAgriJournalItem journalItem = (IAgriJournalItem) journal.getItem();
 			builder.addAll(getPlantPages(journalItem.getDiscoveredSeeds(journal).stream().sorted(Comparator.comparing((plant) -> plant.getPlantName().getString())).collect(Collectors.toList())));

@@ -52,7 +52,7 @@ public class AgriGUI {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onBookRightClick(PlayerInteractEvent.RightClickItem event) {
-		if (!event.getPlayer().world.isRemote || event.getPlayer().isSneaking()) {
+		if (!event.getPlayer().world.isRemote || event.getPlayer().isSneaking()) {// server or sneak
 			return;
 		}
 		if (event.getItemStack().getItem() != AgriCraft.instance.getModItemRegistry().journal.toItem()) {

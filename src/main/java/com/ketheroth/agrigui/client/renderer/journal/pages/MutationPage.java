@@ -1,9 +1,11 @@
 package com.ketheroth.agrigui.client.renderer.journal.pages;
 
 import com.google.common.collect.ImmutableList;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.Collections;
@@ -28,7 +30,7 @@ public class MutationPage extends Page {
 	}
 
 	@Override
-	public void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset) {
+	public void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset, ItemStack stack, IAgriJournalItem journal) {
 		int posX = renderX + PAGE_LEFT_X + 10;
 		int posY = renderY + PAGE_LEFT_Y + 6;
 		int dy = 20;
@@ -39,7 +41,7 @@ public class MutationPage extends Page {
 	}
 
 	@Override
-	public void drawRightSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset) {
+	public void drawRightSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset, ItemStack stack, IAgriJournalItem journal) {
 		int posX = renderX + PAGE_RIGHT_X + 10;
 		int posY = renderY + PAGE_RIGHT_Y + 6;
 		int dy = 20;

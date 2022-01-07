@@ -2,6 +2,7 @@ package com.ketheroth.agrigui.client.renderer.journal.pages;
 
 import com.infinityraider.agricraft.AgriCraft;
 import com.infinityraider.agricraft.api.v1.client.IAgriGrowableGuiRenderer;
+import com.infinityraider.agricraft.api.v1.content.items.IAgriJournalItem;
 import com.infinityraider.agricraft.api.v1.plant.IAgriPlant;
 import com.infinityraider.infinitylib.render.IRenderUtilities;
 import com.ketheroth.agrigui.AgriGUI;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
@@ -34,9 +36,9 @@ public abstract class Page {
 	protected static final int PAGE_HEIGHT = 145;
 	protected final ResourceLocation FONT = new ResourceLocation(AgriGUI.MODID, "unicode_font");
 
-	public abstract void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset);
+	public abstract void drawLeftSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset, ItemStack stack, IAgriJournalItem journal);
 
-	public abstract void drawRightSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset);
+	public abstract void drawRightSheet(TextureManager textureManager, MatrixStack matrixStack, int renderX, int renderY, int blitOffset, ItemStack stack, IAgriJournalItem journal);
 
 	protected int drawText(MatrixStack matrixStack, ITextComponent text, int x, int y, float scale) {
 		matrixStack.push();
