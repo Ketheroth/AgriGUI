@@ -1,5 +1,6 @@
-# AgriGUI - An addon for [AgriCraft](https://github.com/AgriCraft/AgriCraft)
+# This is now merged in agricraft
 
+# AgriGUI - An addon for [AgriCraft](https://github.com/AgriCraft/AgriCraft)
 
 Add GUIs for the mod AgriCraft.
 
